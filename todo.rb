@@ -4,8 +4,8 @@ require 'bcrypt'
 require 'sqlite3'
 
 # models
-require_relative 'models/user'
-require_relative 'models/todolist'
+require './models/user'
+require './models/todolist'
 
 # database
 config = YAML.load(File.open('config/database.yml'))

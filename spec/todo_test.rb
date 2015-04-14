@@ -11,17 +11,10 @@ describe 'The HelloWorld App' do
     Sinatra::Application
   end
 
-  it "says hello" do
+  it "signup and login in index" do
     get '/'
     expect(last_response).to be_ok
     expect(last_response.body).to match('Sign up')
     expect(last_response.body).to match('Log in')
-  end
-end
-
-describe "POST #create" do
-  context "with valid attributes" do
-    it "saves the new xxx in the database"
-    it "redirects to xxx#show"
   end
 end
