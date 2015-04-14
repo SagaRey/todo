@@ -60,7 +60,7 @@
     <% if @count == 0 %>
     $(".panel-heading").addClass('hidden');
     $("#items").addClass('hidden');
-    <% end -%>
+    <% end %>
     Sortable.create($("#items")[0]);
     $("#add-todo").keydown(function(){
       if (event.which == 13) {
