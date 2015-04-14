@@ -24,6 +24,7 @@ get '/todo' do
     redirect to '/'
   else
     @user = User.find(session['user_id'])
+    @todolists = @user.todolists
     erb :todo, layout: !request.xhr?
   end
 end
