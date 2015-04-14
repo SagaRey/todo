@@ -1,0 +1,99 @@
+<% @title = 'Index' %>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <form id="signup" action="/signup" method="post" onsubmit="javascript:return(signupsubmit());">
+        <div class="modal-header">
+          <h4 class="modal-title" id="myModalLabel">Sign up</h4>
+        </div>
+        <div class="modal-body">
+          <div class="form-group <%= 'has-error' if params['error'] == 'signup' %>">
+            <label for="name">Username</label>
+            <input name="name" type="text" class="form-control" id="name" placeholder="Username">
+          </div>
+          <div class="form-group <%= 'has-error' if params['error'] == 'signup' %>">
+            <label for="password">Password</label>
+            <input name="password" type="password" class="form-control" id="password" placeholder="Password">
+          </div>
+          <div class="form-group <%= 'has-error' if params['error'] == 'signup' %>">
+            <label for="repassword">Re-type Password</label>
+            <input name="repassword" type="password" class="form-control" id="repassword" placeholder="Re-type Password">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="login btn btn-default pull-left">Log in</button>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+      </form>
+      <form id="login" class="hidden" action="/login" method="post" onsubmit="javascript:return(loginsubmit());">
+        <div class="modal-header">
+          <h4 class="modal-title" id="myModalLabel">Log in</h4>
+        </div>
+        <div class="modal-body">
+          <div class="form-group <%= 'has-error' if params['error'] == 'login' %>">
+            <label>Username</label>
+            <input name="name" type="text" class="form-control" placeholder="Username">
+          </div>
+          <div class="form-group <%= 'has-error' if params['error'] == 'login' %>">
+            <label>Password</label>
+            <input name="password" type="password" class="form-control" placeholder="Password">
+          </div>
+          <div class="form-group <%= 'has-error' if params['error'] == 'login' %> invisible">
+            <label>Re-type Password</label>
+            <input name="repassword" type="password" class="form-control" placeholder="Re-type Password">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="signup btn btn-default pull-left">Sign up</button>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<script>
+  $(function(){
+    <% if params['error'] == 'login' %>
+      $('#signup').addClass('hidden');
+      $('#login').removeClass('hidden');
+    <% end %>
+    $('#myModal').modal({
+      keyboard: false,
+      backdrop: false
+    });
+    $('.signup').click(function(){
+      $('#login').addClass('hidden');
+      $('#signup').removeClass('hidden');
+    });
+    $('.login').click(function(){
+      $('#signup').addClass('hidden');
+      $('#login').removeClass('hidden');
+    });
+  });
+  function signupsubmit(){
+    if($("#signup").find("[name='name']").val() != "" && $("#signup").find("[name='password']").val() != "" && ($("#signup").find("[name='password']").val() == $("#signup").find("[name='repassword']").val())){
+      return true;
+    }
+    else{
+      $("#signup").find('.form-group').addClass('has-error');
+      return false;
+    }
+  };
+  function loginsubmit(){
+    if($("#login").find("[name='name']").val() != "" && $("#login").find("[name='password']").val() != ""){
+      return true;
+    }
+    else{
+      $("#login").find('.form-group').addClass('has-error');
+      return false;
+    }
+  };
+</script>
+<style>
+  body {
+    background-image: url("images/bg.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center top;
+  }
+</style>

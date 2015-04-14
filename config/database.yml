@@ -1,0 +1,4 @@
+---
+adapter:    sqlite3
+encode:     utf8
+database:   db/todo.db
