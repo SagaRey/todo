@@ -20,12 +20,10 @@
             <div class="col-md-3">
               <span id="left">
                 <span>
-                  <% if @left_items.nil? %>
-                  <% nil %>
-                  <% else %>
+                  <% unless @left_items.nil? %>
                   <%= "1 item left" if @left_items == 1 %>
                   <%= "#{@left_items} items left" if @left_items > 1 %>
-                  <% end -%>
+                  <% end %>
                 </span>
               </span>
             </div>
