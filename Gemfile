@@ -5,5 +5,8 @@ gem 'sinatra'
 gem 'bcrypt'
 gem 'activerecord'
 gem 'sqlite3'
-gem 'rack-test'
-gem 'rspec'
+
+group :test do
+  gem 'rack-test'
+  gem 'rspec'
+end

@@ -11,7 +11,7 @@ class TodoTest < Test::Unit::TestCase
     Sinatra::Application
   end
 
-  test "index_test" do
+  test "should match signup and login in index" do
     get '/'
     assert last_response.ok?
     assert_match 'Sign up', last_response.body
