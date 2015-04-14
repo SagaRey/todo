@@ -8,7 +8,7 @@
   <div class="row">
     <div class="col-md-6 col-md-offset-3">
       <h4 class="text-right">
-        <small>Hi, <%= @user.name %>. <a id="logout" href="/logout">Logout </a></small>
+        <small>Hi, <%= @user.name %>. <a id="logout" href="logout">Logout </a></small>
       </h4>
     </div>
   </div>
@@ -70,14 +70,14 @@
           return false;
         };
         $.ajax({
-          url: '/todo',
+          url: 'todo',
           type: 'POST',
           data:{ content: $(this).val() },
           dataType: 'html',
           timeout: 3000,
           success: function(result){
-            $("#items").load('/todo #items li');
-            $("#left").load('/todo #left span');
+            $("#items").load('todo #items li');
+            $("#left").load('todo #left span');
             $("#add-todo").val("");
             $("#all").click();
             if(result > 0){
@@ -90,27 +90,27 @@
     });
     $(".panel").on('click', '.glyphicon-ok', function(){
       $.ajax({
-        url: '/todo',
+        url: 'todo',
         type: 'PUT',
         data:{ todolist_id: $(this).parents("li").attr('id') },
         timeout: 3000,
         success: function(result){
-          $("#items").load('/todo #items li');
-          $("#left").load('/todo #left span');
+          $("#items").load('todo #items li');
+          $("#left").load('todo #left span');
           $("#all").click();
         }
       });
     });
     $(".panel").on('click', '.glyphicon-remove', function(){
       $.ajax({
-        url: '/todo',
+        url: 'todo',
         type: 'DELETE',
         data:{ todolist_id: $(this).parents("li").attr('id') },
         dataType: 'html',
         timeout: 3000,
         success: function(result){
-          $("#items").load('/todo #items li');
-          $("#left").load('/todo #left span');
+          $("#items").load('todo #items li');
+          $("#left").load('todo #left span');
           $("#all").click();
           if(result == 0){
             $(".panel-heading").addClass('hidden');
@@ -121,14 +121,14 @@
     });
     $("#clear-completed").click(function(){
       $.ajax({
-        url: '/todo',
+        url: 'todo',
         type: 'DELETE',
         data:{ todolist_id: 'ids' },
         dataType: 'html',
         timeout: 3000,
         success: function(result){
-          $("#items").load('/todo #items li');
-          $("#left").load('/todo #left span');
+          $("#items").load('todo #items li');
+          $("#left").load('todo #left span');
           $("#all").click();
           if(result == 0){
             $(".panel-heading").addClass('hidden');
@@ -164,20 +164,19 @@
 function allowDrop(evt)
 {
   evt.preventDefault();
-  $("#" + evt.dataTransfer.getData('Id')).css('color', 'red');
 };
 function active(evt)
 {
   evt.preventDefault();
   if($("#" + evt.dataTransfer.getData('Id')).hasClass('completed')){
     $.ajax({
-      url: '/todo',
+      url: 'todo',
       type: 'PUT',
       data:{ todolist_id: $("#" + evt.dataTransfer.getData('Id')).attr('id') },
       timeout: 3000,
       success: function(result){
-        $("#items").load('/todo #items li');
-        $("#left").load('/todo #left span');
+        $("#items").load('todo #items li');
+        $("#left").load('todo #left span');
         $("#all").click();
       }
     });
@@ -188,13 +187,13 @@ function completed(evt)
   evt.preventDefault();
   if($("#" + evt.dataTransfer.getData('Id')).hasClass('actived')){
     $.ajax({
-      url: '/todo',
+      url: 'todo',
       type: 'PUT',
       data:{ todolist_id: $("#" + evt.dataTransfer.getData('Id')).attr('id') },
       timeout: 3000,
       success: function(result){
-        $("#items").load('/todo #items li');
-        $("#left").load('/todo #left span');
+        $("#items").load('todo #items li');
+        $("#left").load('todo #left span');
         $("#all").click();
       }
     });
