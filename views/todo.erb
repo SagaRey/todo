@@ -42,8 +42,8 @@
           <li id="<%= todo.id %>" class="list-group-item <%= todo.status %>">
             <span class="content"><%= todo.content %></span>
             <span class="control hidden pull-right">
-              <a class="glyphicon glyphicon-ok"></a>
-              <a class="glyphicon glyphicon-remove"></a>
+              <span class="ok glyphicon glyphicon-<%= todo.status == 'actived' ? 'unchecked' : 'check' %>"></span>
+              <span class="remove glyphicon glyphicon-remove"></span>
             </span>
           </li>
           <% end %>
@@ -86,7 +86,7 @@
         });
       }
     });
-    $(".panel").on('click', '.glyphicon-ok', function(){
+    $(".panel").on('click', '.ok', function(){
       $.ajax({
         url: 'todo',
         type: 'PUT',
@@ -99,7 +99,7 @@
         }
       });
     });
-    $(".panel").on('click', '.glyphicon-remove', function(){
+    $(".panel").on('click', '.remove', function(){
       $.ajax({
         url: 'todo',
         type: 'DELETE',
@@ -243,14 +243,14 @@ function completed(evt)
   #add-todo:focus {
     outline: 0;
   }
-  .glyphicon-ok + .glyphicon-remove {
+  .ok + .remove {
     padding-left: 20px;
     padding-right: 8px;
   }
-  .glyphicon-ok, .glyphicon-ok:hover {
+  .ok, .ok:hover {
     color: #5cb85c;
   }
-  .glyphicon-remove, .glyphicon-remove:hover {
+  .remove, .remove:hover {
     color: #d9534f;
   }
   .atab {
