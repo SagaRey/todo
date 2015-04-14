@@ -1,0 +1,177 @@
+<% @title = 'ToDo' %>
+<div class="container">
+  <div class="row">
+    <div class="col-md-6 col-md-offset-3">
+      <h1 id="title" class="text-center">TODO</h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6 col-md-offset-3">
+      <a href="">
+        <h4 class="text-right">
+          <small>Logout <span class="glyphicon glyphicon-off" aria-hidden="true"></span></small>
+        </h4>
+      </a>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6 col-md-offset-3">
+      <div class="panel panel-default">
+        <div id="menu" class="panel-heading">
+          <div class="row">
+            <div class="col-md-3">
+              <span id="left">3 items left</span>
+            </div>
+            <div class="col-md-6">
+              <a id="all" class="tab atab btn btn-xs btn-link">All</a>
+              <a id="active" class="tab btn btn-xs btn-link" ondrop="active(event)" ondragover="allowDrop(event)" ondragout="alert('第三代');">Active</a>
+              <a id="completed" class="tab btn btn-xs btn-link" ondrop="completed(event)" ondragover="allowDrop(event)">Completed</a>
+            </div>
+            <div class="col-md-3 text-right">
+              <a class="btn btn-xs btn-link">Clear completed</a>
+            </div>
+          </div>
+        </div>
+        <ul id="items" class="list-group">
+          <li id="tl1" class="list-group-item">
+            <span class="content">Porta ac consectetur ac</span>
+            <span class="control hidden pull-right">
+              <a class="glyphicon glyphicon-ok"></a><a class="glyphicon glyphicon-remove"></a>
+            </span>
+          </li>
+          <li id="tl2" class="list-group-item">
+            <span class="content">Porta ac consectetur ac</span>
+            <span class="control hidden pull-right">
+              <a class="glyphicon glyphicon-ok"></a><a class="glyphicon glyphicon-remove"></a>
+            </span>
+          </li>
+          <li id="tl3" class="list-group-item">
+            <span class="content">Porta ac consectetur ac</span>
+            <span class="control hidden pull-right">
+              <a class="glyphicon glyphicon-ok"></a><a class="glyphicon glyphicon-remove"></a>
+            </span>
+          </li>
+          <li id="tl4" class="list-group-item">
+            <span class="content">Porta ac consectetur ac</span>
+            <span class="control hidden pull-right">
+              <a class="glyphicon glyphicon-ok"></a><a class="glyphicon glyphicon-remove"></a>
+            </span>
+          </li>
+          <li id="tl5" class="list-group-item">
+            <span class="content">Porta ac consectetur ac</span>
+            <span class="control hidden pull-right">
+              <a class="glyphicon glyphicon-ok"></a><a class="glyphicon glyphicon-remove"></a>
+            </span>
+          </li>
+        </ul>
+        <div class="panel-footer">
+          <input id="add-todo" placeholder="What needs to be done?" autofocus type="text">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  $(function(){
+    Sortable.create($("#items")[0]);
+    $("#add-todo").keydown(function(){
+      if (event.which == 13) {
+        $("#items").load('/todo #items li');
+      }
+    });
+    $(".panel").on('mouseover', 'li', function(){
+      $(this).children('.control').removeClass('hidden');
+    });
+    $(".panel").on('mouseout', 'li', function(){
+      $(this).children('.control').addClass('hidden');
+    });
+    $(".panel").on('click', '.glyphicon-ok', function(){
+      alert($(this).parents("li").attr('id'));
+    });
+    $(".panel").on('click', '.glyphicon-remove', function(){
+      alert($(this).parents("li").attr('id'));
+    });
+    $(".tab").on('click', function(){
+      $('.tab').removeClass('atab');
+      $(this).addClass('atab');
+    });
+  });
+  function allowDrop(evt)
+  {
+    evt.preventDefault();
+    $("#" + evt.dataTransfer.getData('Id')).css('color', 'red');
+  };
+  function active(evt)
+  {
+    evt.preventDefault();
+    $("#" + evt.dataTransfer.getData('Id')).hide();
+  }
+  function completed(evt)
+  {
+    evt.preventDefault();
+    $("#" + evt.dataTransfer.getData('Id')).hide();
+  }
+</script>
+<style>
+  body {
+    background-image: url("images/bg.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center top;
+  }
+  .btn-link,
+  .btn-link:hover,
+  #title {
+    color: #b11101;
+  }
+  .panel {
+    background-color: transparent;
+    box-shadow: -2px 2px 24px #666;
+  }
+  .panel li{
+    padding: 12px;
+  }
+  .panel li:hover{
+    position: relative;
+    left: -2px;
+    border-radius: 3px !important;
+    border-left-width: 3px !important;
+    border-left-color: #b11101;
+  }
+  .panel li span.content{
+    font-size: 18px;
+    cursor:move;
+  }
+  .panel-footer {
+    background-color: transparent !important;
+  }
+  #add-todo {
+    padding: 6px 2px;
+    font-size: 18px;
+    background-color: transparent;
+    border: 0;
+    width: 100%;
+    border-radius: 0;
+    border-bottom: 2px solid #b11101;
+  }
+  #add-todo:focus {
+    outline: 0;
+  }
+  .glyphicon-ok + .glyphicon-remove {
+    padding-left: 20px;
+    padding-right: 8px;
+  }
+  .glyphicon-ok, .glyphicon-ok:hover {
+    color: #5cb85c;
+  }
+  .glyphicon-remove, .glyphicon-remove:hover {
+    color: #d9534f;
+  }
+  .atab {
+    border-radius: 0;
+    border-bottom: 1px solid #b11101;
+  }
+  input::-webkit-input-placeholder {
+    font-style: italic;
+  }
+</style>

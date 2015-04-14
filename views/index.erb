@@ -1,0 +1,77 @@
+<% @title = 'Index' %>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <form id="signup" action="/signup" method="post">
+        <div class="modal-header">
+          <h4 class="modal-title" id="myModalLabel">Sign up</h4>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="name">Username</label>
+            <input type="email" class="form-control" id="name" placeholder="Username">
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" class="form-control" id="password" placeholder="Password">
+          </div>
+          <div class="form-group">
+            <label for="repassword">Re-type Password</label>
+            <input type="password" class="form-control" id="repassword" placeholder="Re-type Password">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="login btn btn-default pull-left">Log in</button>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+      </form>
+      <form id="login" class="hidden" action="/login" method="post">
+        <div class="modal-header">
+          <h4 class="modal-title" id="myModalLabel">Log in</h4>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="name">Username</label>
+            <input type="email" class="form-control" id="name" placeholder="Username">
+          </div>
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" class="form-control" id="password" placeholder="Password">
+          </div>
+          <div class="form-group invisible">
+            <label for="repassword">Re-type Password</label>
+            <input type="password" class="form-control" id="repassword" placeholder="Re-type Password">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="signup btn btn-default pull-left">Sign up</button>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<script>
+  $(function(){
+    $('#myModal').modal({
+      keyboard: false,
+      backdrop: false
+    });
+    $('.signup').click(function(){
+      $('#login').addClass('hidden');
+      $('#signup').removeClass('hidden');
+    });
+    $('.login').click(function(){
+      $('#signup').addClass('hidden');
+      $('#login').removeClass('hidden');
+    });
+  });
+</script>
+<style>
+  body {
+    background-image: url("images/bg.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center top;
+  }
+</style>
