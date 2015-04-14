@@ -24,7 +24,9 @@ get '/todo' do
     redirect to '/'
   else
     @user = User.find(session['user_id'])
-    @todolists = @user.todolists
+    @todolists = @user.todolists.where('status in (?)', ['active', 'completed'])
+    @count = @todolists.count
+    @left_items = @todolists.where('status = ?', 'active').count
     erb :todo, layout: !request.xhr?
   end
 end

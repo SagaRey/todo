@@ -1,4 +1,4 @@
-<% @title = @todolists.count %>
+<% @title = 'ToDo' %>
 <div class="container">
   <div class="row">
     <div class="col-md-6 col-md-offset-3">
@@ -18,11 +18,18 @@
         <div id="menu" class="panel-heading">
           <div class="row">
             <div class="col-md-3">
-              <span id="left">3 items left</span>
+              <span id="left">
+                <% if @left_items.nil? %>
+                  <% nil %>
+                <% else %>
+                  <%= "1 item left" if @left_items == 1 %>
+                  <%= "#{@left_items} items left" if @left_items > 1 %>
+                <% end -%>
+              </span>
             </div>
             <div class="col-md-6">
               <a id="all" class="tab atab btn btn-xs btn-link">All</a>
-              <a id="active" class="tab btn btn-xs btn-link" ondrop="active(event)" ondragover="allowDrop(event)" ondragout="alert('第三代');">Active</a>
+              <a id="active" class="tab btn btn-xs btn-link" ondrop="active(event)" ondragover="allowDrop(event)">Active</a>
               <a id="completed" class="tab btn btn-xs btn-link" ondrop="completed(event)" ondragover="allowDrop(event)">Completed</a>
             </div>
             <div class="col-md-3 text-right">
@@ -103,12 +110,16 @@
   {
     evt.preventDefault();
     $("#" + evt.dataTransfer.getData('Id')).hide();
-  }
+  };
   function completed(evt)
   {
     evt.preventDefault();
     $("#" + evt.dataTransfer.getData('Id')).hide();
-  }
+  };
+  <% if @count == 0 %>
+  $(".panel-heading").addClass('hidden');
+  $("#items").addClass('hidden');
+  <% end -%>
 </script>
 <style>
   body {
