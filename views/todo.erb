@@ -19,12 +19,14 @@
           <div class="row">
             <div class="col-md-3">
               <span id="left">
-                <% if @left_items.nil? %>
+                <span>
+                  <% if @left_items.nil? %>
                   <% nil %>
-                <% else %>
+                  <% else %>
                   <%= "1 item left" if @left_items == 1 %>
                   <%= "#{@left_items} items left" if @left_items > 1 %>
-                <% end -%>
+                  <% end -%>
+                </span>
               </span>
             </div>
             <div class="col-md-6">
@@ -33,41 +35,20 @@
               <a id="completed" class="tab btn btn-xs btn-link" ondrop="completed(event)" ondragover="allowDrop(event)">Completed</a>
             </div>
             <div class="col-md-3 text-right">
-              <a class="btn btn-xs btn-link">Clear completed</a>
+              <a id="clear-completed" class="btn btn-xs btn-link">Clear completed</a>
             </div>
           </div>
         </div>
         <ul id="items" class="list-group">
-          <li id="tl1" class="list-group-item">
-            <span class="content">Porta ac consectetur ac</span>
+          <% @todolists.each do |todo| %>
+          <li id="<%= todo.id %>" class="list-group-item <%= todo.status %>">
+            <span class="content"><%= todo.content %></span>
             <span class="control hidden pull-right">
-              <a class="glyphicon glyphicon-ok"></a><a class="glyphicon glyphicon-remove"></a>
+              <a class="glyphicon glyphicon-ok"></a>
+              <a class="glyphicon glyphicon-remove"></a>
             </span>
           </li>
-          <li id="tl2" class="list-group-item">
-            <span class="content">Porta ac consectetur ac</span>
-            <span class="control hidden pull-right">
-              <a class="glyphicon glyphicon-ok"></a><a class="glyphicon glyphicon-remove"></a>
-            </span>
-          </li>
-          <li id="tl3" class="list-group-item">
-            <span class="content">Porta ac consectetur ac</span>
-            <span class="control hidden pull-right">
-              <a class="glyphicon glyphicon-ok"></a><a class="glyphicon glyphicon-remove"></a>
-            </span>
-          </li>
-          <li id="tl4" class="list-group-item">
-            <span class="content">Porta ac consectetur ac</span>
-            <span class="control hidden pull-right">
-              <a class="glyphicon glyphicon-ok"></a><a class="glyphicon glyphicon-remove"></a>
-            </span>
-          </li>
-          <li id="tl5" class="list-group-item">
-            <span class="content">Porta ac consectetur ac</span>
-            <span class="control hidden pull-right">
-              <a class="glyphicon glyphicon-ok"></a><a class="glyphicon glyphicon-remove"></a>
-            </span>
-          </li>
+          <% end %>
         </ul>
         <div class="panel-footer">
           <input id="add-todo" placeholder="What needs to be done?" autofocus type="text">
@@ -78,11 +59,83 @@
 </div>
 <script>
   $(function(){
+    <% if @count == 0 %>
+    $(".panel-heading").addClass('hidden');
+    $("#items").addClass('hidden');
+    <% end -%>
     Sortable.create($("#items")[0]);
     $("#add-todo").keydown(function(){
       if (event.which == 13) {
-        $("#items").load('/todo #items li');
+        if($(this).val() == ""){
+          return false;
+        };
+        $.ajax({
+          url: '/todo',
+          type: 'POST',
+          data:{ content: $(this).val() },
+          dataType: 'html',
+          timeout: 3000,
+          success: function(result){
+            $("#items").load('/todo #items li');
+            $("#left").load('/todo #left span');
+            $("#add-todo").val("");
+            $("#all").click();
+            if(result > 0){
+              $(".panel-heading").removeClass('hidden');
+              $("#items").removeClass('hidden');
+            };
+          }
+        });
       }
+    });
+    $(".panel").on('click', '.glyphicon-ok', function(){
+      $.ajax({
+        url: '/todo',
+        type: 'PUT',
+        data:{ todolist_id: $(this).parents("li").attr('id') },
+        timeout: 3000,
+        success: function(result){
+          $("#items").load('/todo #items li');
+          $("#left").load('/todo #left span');
+          $("#all").click();
+        }
+      });
+    });
+    $(".panel").on('click', '.glyphicon-remove', function(){
+      $.ajax({
+        url: '/todo',
+        type: 'DELETE',
+        data:{ todolist_id: $(this).parents("li").attr('id') },
+        dataType: 'html',
+        timeout: 3000,
+        success: function(result){
+          $("#items").load('/todo #items li');
+          $("#left").load('/todo #left span');
+          $("#all").click();
+          if(result == 0){
+            $(".panel-heading").addClass('hidden');
+            $("#items").addClass('hidden');
+          };
+        }
+      });
+    });
+    $("#clear-completed").click(function(){
+      $.ajax({
+        url: '/todo',
+        type: 'DELETE',
+        data:{ todolist_id: 'ids' },
+        dataType: 'html',
+        timeout: 3000,
+        success: function(result){
+          $("#items").load('/todo #items li');
+          $("#left").load('/todo #left span');
+          $("#all").click();
+          if(result == 0){
+            $(".panel-heading").addClass('hidden');
+            $("#items").addClass('hidden');
+          };
+        }
+      });
     });
     $(".panel").on('mouseover', 'li', function(){
       $(this).children('.control').removeClass('hidden');
@@ -90,36 +143,63 @@
     $(".panel").on('mouseout', 'li', function(){
       $(this).children('.control').addClass('hidden');
     });
-    $(".panel").on('click', '.glyphicon-ok', function(){
-      alert($(this).parents("li").attr('id'));
-    });
-    $(".panel").on('click', '.glyphicon-remove', function(){
-      alert($(this).parents("li").attr('id'));
-    });
-    $(".tab").on('click', function(){
+    $("#all").click(function(){
       $('.tab').removeClass('atab');
       $(this).addClass('atab');
+      $('#items li').removeClass('hidden');
+    });
+    $("#active").click(function(){
+      $('.tab').removeClass('atab');
+      $(this).addClass('atab');
+      $('#items li.actived').removeClass('hidden');
+      $('#items li.completed').addClass('hidden');
+    });
+    $("#completed").click(function(){
+      $('.tab').removeClass('atab');
+      $(this).addClass('atab');
+      $('#items li.completed').removeClass('hidden');
+      $('#items li.actived').addClass('hidden');
     });
   });
-  function allowDrop(evt)
-  {
-    evt.preventDefault();
-    $("#" + evt.dataTransfer.getData('Id')).css('color', 'red');
-  };
-  function active(evt)
-  {
-    evt.preventDefault();
-    $("#" + evt.dataTransfer.getData('Id')).hide();
-  };
-  function completed(evt)
-  {
-    evt.preventDefault();
-    $("#" + evt.dataTransfer.getData('Id')).hide();
-  };
-  <% if @count == 0 %>
-  $(".panel-heading").addClass('hidden');
-  $("#items").addClass('hidden');
-  <% end -%>
+function allowDrop(evt)
+{
+  evt.preventDefault();
+  $("#" + evt.dataTransfer.getData('Id')).css('color', 'red');
+};
+function active(evt)
+{
+  evt.preventDefault();
+  if($("#" + evt.dataTransfer.getData('Id')).hasClass('completed')){
+    $.ajax({
+      url: '/todo',
+      type: 'PUT',
+      data:{ todolist_id: $("#" + evt.dataTransfer.getData('Id')).attr('id') },
+      timeout: 3000,
+      success: function(result){
+        $("#items").load('/todo #items li');
+        $("#left").load('/todo #left span');
+        $("#all").click();
+      }
+    });
+  }
+};
+function completed(evt)
+{
+  evt.preventDefault();
+  if($("#" + evt.dataTransfer.getData('Id')).hasClass('actived')){
+    $.ajax({
+      url: '/todo',
+      type: 'PUT',
+      data:{ todolist_id: $("#" + evt.dataTransfer.getData('Id')).attr('id') },
+      timeout: 3000,
+      success: function(result){
+        $("#items").load('/todo #items li');
+        $("#left").load('/todo #left span');
+        $("#all").click();
+      }
+    });
+  }
+};
 </script>
 <style>
   body {
@@ -182,6 +262,10 @@
   }
   #logout {
     color: #b11101;
+  }
+  .completed {
+    text-decoration: line-through;
+    color: #aaa;
   }
   input::-webkit-input-placeholder {
     font-style: italic;
